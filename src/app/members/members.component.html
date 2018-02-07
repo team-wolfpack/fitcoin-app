@@ -1,0 +1,61 @@
+<div class="container content">
+	<div class="jumbotron">
+	  <h1>{{ this.clubName }}</h1>
+	  <h3>{{ this.clubOwnerFirstName }} {{this.clubOwnerLastName }}</h3>
+	  <div class="row">
+	    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Create a New Member</button>
+	  </div>
+ 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	       <form novalidate #newMemberForm="ngForm">
+			  <div class="form-group">
+			    <label for="memberFirstName">Member First Name</label>
+			    <input name="memberFirstName" [(ngModel)]="this.memberFirstName" type="text" class="form-control" id="memberFirstName">
+			  </div>
+			  <div class="form-group">
+			    <label for="memberLastName">Member Last Name</label>
+			    <input name="memberLastName" [(ngModel)]="this.memberLastName" type="text" class="form-control" id="memberLastName">
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" (click)="addNewMember()" data-dismiss="modal">Add Member</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Modal -->
+	
+	<div class="container scrollableContent">
+	  <table class="table table-hover">
+	  <thead>
+	  	<tr>
+	  		<td>First Name</td>
+	  		<td>Last Name</td>
+	  		<td>Status</td>
+	  		<td>Member Actions</td>
+	  	</tr>
+	  </thead>
+	  <tbody>
+	  <tr *ngFor="let member of members">
+	  	<td>{{ member.personFirstName }}</td>
+	  	<td>{{ member.personLastName }}</td>
+	  	<td>{{ member.memberStatus }}</td>
+	  	<td><app-member-detail [personId]="member.personId" [memberStatus]="member.memberStatus"></app-member-detail></td>
+	  </tr>
+	  </tbody>
+	  </table>
+	</div>
+	
+
+</div>

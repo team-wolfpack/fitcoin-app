@@ -1,0 +1,37 @@
+
+ 	<!-- Modal -->
+	<div class="modal fade" id="redeemFitCoinsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	       <form novalidate #redeemFitCoinsForm="ngForm">
+	       	  <input name="memberId" [(ngModel)]="this.personId" type="text" class="form-control">
+			  <div class="form-group">
+			    <label for="store">Store</label>
+			    <select class="form-control" name="store" [(ngModel)]="this.store" required>
+			   	 	<option *ngFor="let store of stores" [value]="store.personId">{{store.storeName}}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="redeemedFor">Redeeming for What</label>
+			    <input name="redeemedFor" [(ngModel)]="this.redeemedFor" type="text" class="form-control" id="redeemedFor" required>
+			  </div>
+			  <div class="form-group">
+			    <label for="fitCoinsToRedeem">Amount to Redeem</label>
+			    <input name="fitCoinsToRedeem" [(ngModel)]="this.fitCoinsToRedeem" type="text" class="form-control" id="fitCoinsToRedeem" required>
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" (click)="redeemFitCoins()" data-dismiss="modal">Redeem FitCoins</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Modal -->
+	
