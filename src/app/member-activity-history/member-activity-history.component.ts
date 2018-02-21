@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, SimpleChange  } fro
 import { Http, Response } from '@angular/http';
 import { DatePipe, SlicePipe } from '@angular/common';
 import 'rxjs/add/operator/map';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class MemberActivityHistoryComponent implements OnChanges, OnInit {
   
   activityHistory: any = [];
   
-  private apiBaseURL="http://184.172.234.29:31090/api/";
+  private apiBaseURL=environment.apiBaseURL;
 
   constructor(private http: Http) { }
   

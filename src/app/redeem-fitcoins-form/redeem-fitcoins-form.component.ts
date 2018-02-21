@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { Http, Response } from '@angular/http';
-
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-redeem-fitcoins-form',
@@ -15,7 +15,7 @@ export class RedeemFitcoinsFormComponent implements OnChanges, OnInit {
 
   constructor(private http: Http) { }
 
-  private apiBaseURL="http://184.172.234.29:31090/api/";
+  private apiBaseURL=environment.apiBaseURL;
   private stores: any = []; 
   private store: string;
   private redeemedFor: string;

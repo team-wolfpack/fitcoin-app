@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MemberDetailService } from '../member-detail.service';
 import { Http, Response } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-member-detail',
@@ -17,7 +18,7 @@ export class MemberDetailComponent implements OnInit {
 	@Output() redeemFitCoinsEvent = new EventEmitter<string>();
 	@Output() showMemberActivityHistoryEvent = new EventEmitter<string>();
 	
-	private apiBaseURL="http://184.172.234.29:31090/api/";
+	private apiBaseURL=environment.apiBaseURL;
 	fitCoinBalance: number = 0;
 	inactivateMemberButton = 'disabled';
 	private stores: any = []; 
