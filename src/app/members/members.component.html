@@ -36,13 +36,15 @@
 	</div>
 	<!-- Modal -->
 	
+	<app-redeem-fitcoins-form [redeemFitCoinsShow]="this.redeemFitCoinsShow" [personId]="this.personId" (closeRedeemFitCoinsFormEvent)="closeRedeemFitCoinsFormMessage($event)"></app-redeem-fitcoins-form>
+	<app-member-activity-history [memberHistoryShow]="this.memberHistoryShow" [personId]="this.personId"></app-member-activity-history>
+	
 	<div class="container scrollableContent">
 	  <table class="table table-hover">
 	  <thead>
 	  	<tr>
-	  		<td>First Name</td>
-	  		<td>Last Name</td>
-	  		<td>Status</td>
+	  		<td>Member First Name</td>
+	  		<td>Member Last Name</td>
 	  		<td>Member Actions</td>
 	  	</tr>
 	  </thead>
@@ -50,8 +52,7 @@
 	  <tr *ngFor="let member of members">
 	  	<td>{{ member.personFirstName }}</td>
 	  	<td>{{ member.personLastName }}</td>
-	  	<td>{{ member.memberStatus }}</td>
-	  	<td><app-member-detail [personId]="member.personId" [memberStatus]="member.memberStatus"></app-member-detail></td>
+	  	<td><app-member-detail [personId]="member.personId" [memberStatus]="member.memberStatus" (showMemberActivityHistoryEvent)="showMemberActivityHistoryMessage($event)" (redeemFitCoinsEvent)="redeemFitCoinsMessage($event)"></app-member-detail></td>
 	  </tr>
 	  </tbody>
 	  </table>

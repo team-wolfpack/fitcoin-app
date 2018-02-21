@@ -7,8 +7,8 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { MembersComponent } from './members/members.component';
 import { MemberDetailComponent } from './member-detail/member-detail.component';
-import { MembersService } from './members.service';
 import { RedeemFitcoinsFormComponent } from './redeem-fitcoins-form/redeem-fitcoins-form.component';
+import { MemberActivityHistoryComponent } from './member-activity-history/member-activity-history.component';
 
 // Define the routes
 const ROUTES = [
@@ -28,7 +28,8 @@ const ROUTES = [
     AppComponent,
     MembersComponent,
     MemberDetailComponent,
-    RedeemFitcoinsFormComponent
+    RedeemFitcoinsFormComponent,
+    MemberActivityHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +37,7 @@ const ROUTES = [
     HttpModule,
     RouterModule.forRoot(ROUTES) // Add routes to the app
   ],
-  providers: [MembersService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

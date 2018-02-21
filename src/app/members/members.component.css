@@ -1,9 +1,10 @@
+/*
 div.content {
 	position: absolute;
 	top: 140px;
 	left: 50px;
 }
-
+*/
 div.scrollableContent {
 	overflow: scroll;
 	height: 60%;

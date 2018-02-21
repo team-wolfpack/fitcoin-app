@@ -1,5 +1,5 @@
- <button class="btn btn-primary {{ this.inactivateMemberButton }}" data-toggle="tooltip" title="Member Balance" style="width:75px;"><span class="badge">{{ fitCoinBalance }}</span></button>
- <span data-toggle="modal" data-target="#redeemFitCoinsModal"><button class="btn btn-primary {{ this.inactivateMemberButton }}" data-toggle="tooltip" title="Redeem FitCoins"><span class="glyphicon glyphicon-bitcoin" aria-hidden="true"></span></button></span>
+ <span data-toggle="modal" data-target="#memberHistoryShow"><button class="btn btn-primary {{ this.inactivateMemberButton }}" (click)="showMemberActivityHistory(this.personId)" data-toggle="tooltip" title="Member Balance" style="width:75px;"><span class="badge">{{ fitCoinBalance }}</span></button></span>
+ <span data-toggle="modal" data-target="#redeemFitCoinsShow"><button class="btn btn-primary {{ this.inactivateMemberButton }}" (click)="redeemFitCoins(this.personId)" data-toggle="tooltip" title="Redeem FitCoins"><span class="glyphicon glyphicon-bitcoin" aria-hidden="true"></span></button></span>
  <button class="btn btn-primary {{ this.inactivateMemberButton }}" (click)="addFitCoins(this.personId,25)" data-toggle="tooltip" title="Register Workout"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
  <button class="btn btn-primary {{ this.inactivateMemberButton }}" (click)="inactivateMember(this.personId)" data-toggle="tooltip" title="Inactivate Member"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
  

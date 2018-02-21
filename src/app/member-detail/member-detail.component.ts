@@ -1,8 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MemberDetailService } from '../member-detail.service';
 import { Http, Response } from '@angular/http';
-
-//import * as $ from 'jquery';
 
 @Component({
   selector: 'app-member-detail',
@@ -16,6 +14,9 @@ export class MemberDetailComponent implements OnInit {
 	@Input() personId:string;
 	@Input() memberStatus:string;
 	
+	@Output() redeemFitCoinsEvent = new EventEmitter<string>();
+	@Output() showMemberActivityHistoryEvent = new EventEmitter<string>();
+	
 	private apiBaseURL="http://184.172.234.29:31090/api/";
 	fitCoinBalance: number = 0;
 	inactivateMemberButton = 'disabled';
@@ -23,13 +24,21 @@ export class MemberDetailComponent implements OnInit {
 	private store: string;
 	private redeemedFor: string;
 	private fitCoinsToRedeem: number;
+//	private redeemFitCoinsShow: boolean;
 	
 	constructor (private http: Http) {
-		//console.log(this.apiURL);	
+
 	}
 
+	redeemFitCoins(personId) {
+		this.redeemFitCoinsEvent.emit(personId);
+	}
+
+	showMemberActivityHistory(personId) {
+		this.showMemberActivityHistoryEvent.emit(personId);
+	}
+	
 	getFitCoinBalance(personId) {
-		//console.log(this.apiURL);
 		var data;
 		var apiURL = this.apiBaseURL+"FitCoinWallet/"+personId
 		try {
@@ -43,7 +52,7 @@ export class MemberDetailComponent implements OnInit {
 		}
 		return data;
 	}
-	
+		
 	ngOnInit() {
 		this.getFitCoinBalance(this.personId).subscribe(data => {
 			this.fitCoinBalance = Number(data.fitCoinBalance);
@@ -63,7 +72,8 @@ export class MemberDetailComponent implements OnInit {
 		var data = { member: this.personId };
 		this.http.post(apiURL,data)
 			.subscribe(res => {
-					console.log(res);
+					this.inactivateMemberButton = 'disabled';
+					this.memberStatus = 'INACTIVE';
 				},err => {
 					console.log("Error Occurred" + err);
 				}
@@ -76,20 +86,21 @@ export class MemberDetailComponent implements OnInit {
 		var today = new Date();
 		var dd = today.getDate();
 		var mm = today.getMonth()+1; //January is 0!
-
+		var ddString = dd.toString();
+		var mmString = mm.toString();
+		
 		var yyyy = today.getFullYear().toString();
 		if(dd<10){
-		    var ddString='0'+dd.toString();
+		    ddString='0'+dd.toString();
 		} 
 		if(mm<10){
-		    var mmString='0'+mm.toString();
-		} 
+		    mmString='0'+mm.toString();
+		}
 		var todayFormatted = yyyy+'-'+mmString+'-'+ddString;		
 		var data = { member: this.personId,
 				activity: "Checked In",
 				activityDate: todayFormatted,
 				fitCoinQuantity: fitCoinsToAdd };
-		console.log(data);
 		this.http.post(apiURL,data)
 			.subscribe(res => {
 					this.getFitCoinBalance(this.personId).subscribe(data => {

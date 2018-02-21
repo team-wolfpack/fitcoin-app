@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MemberDetailService } from '../member-detail.service';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
 
@@ -8,8 +7,11 @@ import { Http, Response } from '@angular/http';
   templateUrl: './redeem-fitcoins-form.component.html',
   styleUrls: ['./redeem-fitcoins-form.component.css']
 })
-export class RedeemFitcoinsFormComponent implements OnInit {
+export class RedeemFitcoinsFormComponent implements OnChanges, OnInit {
 	@Input() personId:string;
+	@Input() redeemFitCoinsShow:boolean;
+	
+	@Output() closeRedeemFitCoinsFormEvent = new EventEmitter<boolean>();
 
   constructor(private http: Http) { }
 
@@ -19,17 +21,15 @@ export class RedeemFitcoinsFormComponent implements OnInit {
   private redeemedFor: string;
   private fitCoinsToRedeem: number;
   private fitCoinBalance: number = 0;
-
+  private _redeemFitCoinsShow: boolean;
+ 
 	getStores() {
-		console.log('getStores()');
 		var data;
 		var apiURL = this.apiBaseURL+"StoreOwner"
 		try {
 			this.http.get(apiURL)
 			.map((res: Response) => res.json()).subscribe(data => {
 				this.stores = data;
-				console.log('number of stores: ' + this.stores.length);
-				console.log(this.stores);
 			});
 		} catch (err) {
 			console.log ('Error: ' + err);
@@ -38,7 +38,6 @@ export class RedeemFitcoinsFormComponent implements OnInit {
 	}
 	
 	getFitCoinBalance(personId) {
-		//console.log(this.apiURL);
 		var data;
 		var apiURL = this.apiBaseURL+"FitCoinWallet/"+personId
 		try {
@@ -52,32 +51,40 @@ export class RedeemFitcoinsFormComponent implements OnInit {
 		}
 		return data;
 	}
+	
+  ngOnChanges(changes: SimpleChanges) {
+
+  }
 
   ngOnInit() {
     this.getStores();
   }
 	
-  redeemFitCoins(personId) {
-	console.log('redeemFitCoins()');
+  closeForm() {
+	  this.closeRedeemFitCoinsFormEvent.emit(false);
+  }
+ 
+  redeemFitCoins(personId) {	
 	var apiURL = this.apiBaseURL+"RedeemFitCoins";
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
+	var ddString = dd.toString();
+	var mmString = mm.toString();
 
 	var yyyy = today.getFullYear().toString();
 	if(dd<10){
-	    var ddString='0'+dd.toString();
+	    ddString='0'+dd.toString();
 	} 
 	if(mm<10){
-	    var mmString='0'+mm.toString();
-	} 
+	    mmString='0'+mm.toString();
+	}
 	var todayFormatted = yyyy+'-'+mmString+'-'+ddString;		
 	var data = { member: this.personId,
 			storeOwner: this.store,
 			redeemedFor: this.redeemedFor,
 			redeemedDate: todayFormatted,
 			fitCoinQuantity: Number(this.fitCoinsToRedeem) };
-	console.log(data);
 	this.http.post(apiURL,data)
 		.subscribe(res => {
 				this.getFitCoinBalance(this.personId).subscribe(data => {
@@ -85,6 +92,7 @@ export class RedeemFitcoinsFormComponent implements OnInit {
 				}, error => {
 					this.fitCoinBalance = 0;
 				});
+				this.closeRedeemFitCoinsFormEvent.emit(false);
 			},err => {
 				console.log("Error Occurred" + err);
 			}

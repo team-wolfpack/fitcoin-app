@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MembersService } from '../members.service';
 import { Http, Response } from '@angular/http';
 import { FormGroup, FormControl, NgForm } from '@angular/forms';
-//import { MatDialog, MatDialogRef } from '@angular/material';
-//import { AddMemberComponent } from '../add-member';
+import 'rxjs/add/operator/map';
+import { environment } from '../../environments/environment';
 
 
 
@@ -15,7 +14,7 @@ import { FormGroup, FormControl, NgForm } from '@angular/forms';
 export class MembersComponent implements OnInit {
   //instantiate the members
   members: any = [];
-  private apiBaseURL="http://184.172.234.29:31090/api/";
+  private apiBaseURL=environment.apiBaseURL;
   private clubId: string;
   private clubName: string;
   private clubOwnerId: string;
@@ -23,64 +22,96 @@ export class MembersComponent implements OnInit {
   private clubOwnerLastName: string;
   private memberFirstName: string;
   private memberLastName: string;
+  private redeemFitCoinsShow: boolean=false;
+  private memberHistoryShow: boolean=false;
+  private personId: string;
   
-//  addMemberRef: MatDialogRef<AddMemberComponent>;
+  constructor(private http: Http) { }
 
+  showMemberActivityHistoryMessage($event) {
+	  console.log('received a show member history event');
+	  console.log($event);
+	  this.memberHistoryShow = true;
+	  this.personId = $event;
+  }
   
-  constructor(private membersService: MembersService, private http: Http) { }
-
+  redeemFitCoinsMessage($event) {
+	  this.redeemFitCoinsShow = true;
+	  this.personId = $event;
+  }
+  
+  closeRedeemFitCoinsFormMessage($event) {
+	  this.redeemFitCoinsShow = false;
+	  this.getAllMembers();
+  }
+  
+  getClub() {
+		var data;
+		var apiURL = this.apiBaseURL+"Club/CLUB_001";
+		try {
+			data = this.http.get(apiURL).map((res: Response) => res.json());
+		} catch (err) {
+			console.log ('Error: ' + err);
+		}
+		return data;
+  }
+  
+  getClubOwner() {
+		var data;
+		var apiURL = this.apiBaseURL + "ClubOwner/" + this.clubOwnerId;
+		try {
+			data = this.http.get(apiURL)
+			.map((res: Response) => res.json());
+		} catch (err) {
+			console.log ('Error: ' + err);
+		}
+		return data;
+	  
+  }
+  
   getClubData() {
-	var data;
-	var apiURL = this.apiBaseURL+"Club/CLUB_001"
-	try {
-		this.http.get(apiURL)
-		.map((res: Response) => res.json()).subscribe(data => {
-			console.log('got club');
-			console.log('data = ' + data);
-			this.clubId = data.clubId;
-			this.clubName = data.clubName;
-			this.clubOwnerId = data.clubOwner.split('#')[1];
-			console.log('club owner id= ' + this.clubOwnerId);
-			apiURL = this.apiBaseURL + "ClubOwner/" + this.clubOwnerId;
-			console.log(apiURL);
-			this.http.get(apiURL)
-			.map((res: Response) => res.json()).subscribe(data => {
-				console.log(data);
-				this.clubOwnerFirstName = data.personFirstName;
-				this.clubOwnerLastName = data.personLastName;
-			});
+	this.getClub().subscribe (data => {
+		this.clubId = data.clubId;
+		this.clubName = data.clubName;
+		this.clubOwnerId = data.clubOwner.split('#')[1];
+		//this.clubOwnerId = data.clubOwner.personId;
+		this.getClubOwner().subscribe(data => {
+			this.clubOwnerFirstName = data.personFirstName;
+			this.clubOwnerLastName = data.personLastName;			
 		});
-	} catch (err) {
-		console.log ('Error: ' + err);
-	}
+	});
+  }
+  
+  getAllMembers() {
+	  var data;
+	  var apiURL = this.apiBaseURL + "queries/ActiveMembers";
+	  try {
+		  this.http.get(apiURL)
+		  .map((res: Response) => res.json()).subscribe(data => {
+			  this.members = data;
+		  });
+	  } catch (err) {
+		  console.log('Error: ' + err);
+	  }
   }
   
   ngOnInit() {
     // retrieve all Members from API
 	this.getClubData();
-    this.membersService.getAllMembers().subscribe(members => {
-      this.members = members;
-    });
+	this.getAllMembers();
   }
 
   addNewMember() {
 //	  this.addMemberRef = this.dialog.open(AddMemberComponent);
-	  console.log('addNewMember()');
-	  console.log('Member First Name ' + this.memberFirstName);
-	  console.log('Member Last Name ' + this.memberLastName);
-	  console.log(this.clubId);
 	  var apiURL = this.apiBaseURL+"AddMember";
 	  var memberId = "MEMBER_" + Math.floor(Math.random()*2000000).toString();
 	  var data = { memberId: memberId,
 				memberFirstName: this.memberFirstName,
 				memberLastName: this.memberLastName,
 				club: this.clubId };
-		console.log(data);
 		this.http.post(apiURL,data)
 			.subscribe(res => {
-					this.membersService.getAllMembers().subscribe(members => {
-						this.members = members;
-				    });
+					this.getAllMembers();
 				},err => {
 					console.log("Error Occurred" + err);
 				}
