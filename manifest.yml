@@ -1,0 +1,10 @@
+     applications:
+     - path: .
+       memory: 2048M
+       instances: 1
+       name: fitcoin-app
+       buildpack: sdk-for-nodejs
+       health-check-type: process
+       timeout: 120
+       env:
+         CLIENT_PORT: '3000'

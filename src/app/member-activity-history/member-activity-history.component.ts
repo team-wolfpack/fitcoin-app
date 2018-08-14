@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { DatePipe, SlicePipe } from '@angular/common';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
+//import { Response } from '@angular/http';
+//import { DatePipe, SlicePipe } from '@angular/common';
+//import { map } from 'rxjs/add/operators';
 import { environment } from '../../environments/environment';
 
 
@@ -18,14 +19,13 @@ export class MemberActivityHistoryComponent implements OnChanges, OnInit {
   
   private apiBaseURL=environment.apiBaseURL;
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
   
   getFitCoinsReceived(personId) {
 	  var data;
 	  var apiURL = this.apiBaseURL + "queries/FindFitCoinsReceivedByMember?member=resource%3Aorg.fitclub.fitcoin.Member%23" + personId;
 	  try {
-		  this.http.get(apiURL)
-		  .map((res: Response) => res.json()).subscribe(data => {
+		  this.http.get(apiURL).subscribe(data => {
 			  this.activityHistory=data;
 			  this.getFitCoinsRedeemed(personId);
 		  });
@@ -39,7 +39,7 @@ export class MemberActivityHistoryComponent implements OnChanges, OnInit {
 	  var apiURL = this.apiBaseURL + "queries/FindFitCoinRedemptionsByMember?member=resource%3Aorg.fitclub.fitcoin.Member%23" + personId;
 	  try {
 		  this.http.get(apiURL)
-		  .map((res: Response) => res.json()).subscribe(data => {
+		  .subscribe(data => {
 			  var received = this.activityHistory;
 			  var redeemed = data;
 			  this.activityHistory = received.concat(redeemed);

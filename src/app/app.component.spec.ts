@@ -1,4 +1,5 @@
 /* tslint:disable:no-unused-variable */
+import 'jasmine';
 
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';

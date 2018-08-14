@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+//import { Response } from '@angular/http';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -13,7 +14,7 @@ export class RedeemFitcoinsFormComponent implements OnChanges, OnInit {
 	
 	@Output() closeRedeemFitCoinsFormEvent = new EventEmitter<boolean>();
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   private apiBaseURL=environment.apiBaseURL;
   private stores: any = []; 
@@ -27,8 +28,7 @@ export class RedeemFitcoinsFormComponent implements OnChanges, OnInit {
 		var data;
 		var apiURL = this.apiBaseURL+"StoreOwner"
 		try {
-			this.http.get(apiURL)
-			.map((res: Response) => res.json()).subscribe(data => {
+			this.http.get(apiURL).subscribe(data => {
 				this.stores = data;
 			});
 		} catch (err) {
@@ -41,8 +41,7 @@ export class RedeemFitcoinsFormComponent implements OnChanges, OnInit {
 		var data;
 		var apiURL = this.apiBaseURL+"FitCoinWallet/"+personId
 		try {
-			data = this.http.get(apiURL)
-			.map((res: Response) => res.json());
+			data = this.http.get(apiURL);
 		} catch (err) {
 			console.log ('Error: ' + err);
 			data = {

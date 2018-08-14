@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { FormGroup, FormControl, NgForm } from '@angular/forms';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
+//import { Response } from '@angular/http';
+//import { FormGroup, FormControl, NgForm } from '@angular/forms';
+//import 'rxjs/add/operator/map';
 import { environment } from '../../environments/environment';
 
 
@@ -26,7 +27,7 @@ export class MembersComponent implements OnInit {
   private memberHistoryShow: boolean=false;
   private personId: string;
   
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   showMemberActivityHistoryMessage($event) {
 	  console.log('received a show member history event');
@@ -49,7 +50,7 @@ export class MembersComponent implements OnInit {
 		var data;
 		var apiURL = this.apiBaseURL+"Club/CLUB_001";
 		try {
-			data = this.http.get(apiURL).map((res: Response) => res.json());
+			data = this.http.get(apiURL);
 		} catch (err) {
 			console.log ('Error: ' + err);
 		}
@@ -60,8 +61,7 @@ export class MembersComponent implements OnInit {
 		var data;
 		var apiURL = this.apiBaseURL + "ClubOwner/" + this.clubOwnerId;
 		try {
-			data = this.http.get(apiURL)
-			.map((res: Response) => res.json());
+			data = this.http.get(apiURL);
 		} catch (err) {
 			console.log ('Error: ' + err);
 		}
@@ -86,8 +86,7 @@ export class MembersComponent implements OnInit {
 	  var data;
 	  var apiURL = this.apiBaseURL + "queries/ActiveMembers";
 	  try {
-		  this.http.get(apiURL)
-		  .map((res: Response) => res.json()).subscribe(data => {
+		  this.http.get(apiURL).subscribe(data => {
 			  this.members = data;
 		  });
 	  } catch (err) {

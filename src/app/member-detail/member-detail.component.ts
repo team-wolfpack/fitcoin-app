@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { MemberDetailService } from '../member-detail.service';
-import { Http, Response } from '@angular/http';
+//import { MemberDetailService } from '../member-detail.service';
+import { HttpClient } from '@angular/common/http';
+//import { Response } from '@angular/http';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -27,7 +28,7 @@ export class MemberDetailComponent implements OnInit {
 	private fitCoinsToRedeem: number;
 //	private redeemFitCoinsShow: boolean;
 	
-	constructor (private http: Http) {
+	constructor (private http: HttpClient) {
 
 	}
 
@@ -43,8 +44,7 @@ export class MemberDetailComponent implements OnInit {
 		var data;
 		var apiURL = this.apiBaseURL+"FitCoinWallet/"+personId
 		try {
-			data = this.http.get(apiURL)
-			.map((res: Response) => res.json());
+			data = this.http.get(apiURL);
 		} catch (err) {
 			console.log ('Error: ' + err);
 			data = {

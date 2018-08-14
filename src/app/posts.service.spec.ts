@@ -1,4 +1,5 @@
 /* tslint:disable:no-unused-variable */
+import 'jasmine';
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { PostsService } from './posts.service';
